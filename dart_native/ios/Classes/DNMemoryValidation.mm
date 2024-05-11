@@ -28,6 +28,12 @@
 #   define _OBJC_TAG_MASK 1UL
 #endif
 
+#if TARGET_OS_MAC
+#define DN_MACH_VM_MAX_ADDRESS 0x00007FFFFE000000ULL
+#else
+#define DN_MACH_VM_MAX_ADDRESS MACH_VM_MAX_ADDRESS
+#endif
+
 /// Returens true if a pointer is a tagged pointer
 /// @param ptr is the pointer to check
 bool objc_isTaggedPointer(const void *ptr) {
@@ -82,7 +88,7 @@ bool native_isValidPointer(const void *pointer) {
         return false;
     }
     // Check if the pointer is not larger than VM_MAX_ADDRESS
-    if ((uintptr_t)pointer > MACH_VM_MAX_ADDRESS) {
+    if ((uintptr_t)pointer > DN_MACH_VM_MAX_ADDRESS) {
         return false;
     }
     if (DartNativeCanThrowException()) {
